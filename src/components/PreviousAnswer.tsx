@@ -9,7 +9,6 @@ const useStyles = makeStyles(theme => ({
     root: {
         fontFamily: 'Monospace',
         textAlign: 'center',
-        backgroundColor: theme.palette.primary.light,
     },
     correct: {
         backgroundColor: 'green',
