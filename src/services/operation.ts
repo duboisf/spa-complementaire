@@ -46,4 +46,8 @@ export class BinaryOperation implements Operation {
                 return this.x / this.y;
         }
     }
+
+    toString(): string {
+        return `${this.x} ${operatorToString(this.operator)} ${this.y}`;
+    }
 }
