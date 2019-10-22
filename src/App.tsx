@@ -19,6 +19,9 @@ const useStyles = makeStyles(() => ({
   },
   question: {
     fontSize: '3rem',
+  },
+  stats: {
+    fontSize: '1rem',
   }
 }));
 
@@ -46,11 +49,13 @@ export default function App() {
   const cls = useStyles();
   const [operation, setOperation] = useState(randomOperation());
   const [answers, setAnswers] = useState([] as AnsweredOperation[]);
+  const [correctCount, setCorrectCount] = useState(0);
   const giveAnswer = (answer: number) => {
     const answeredOp = { operation, answer };
-    setAnswers([answeredOp, ...answers]);
+    setAnswers([...answers, answeredOp]);
     if (operation.output() === answer) {
       setOperation(randomOperation());
+      setCorrectCount(correctCount + 1);
     }
   }
   return (
@@ -70,8 +75,11 @@ export default function App() {
             <Grid item>
               <Expression operation={operation} />
             </Grid>
-            <Grid item xs={4}>
+            <Grid item>
               <Answer giveAnswer={giveAnswer} />
+            </Grid>
+            <Grid container item className={cls.stats} alignContent="center" xs={2}>
+              Total: {correctCount}/{answers.length}
             </Grid>
           </Grid>
 
