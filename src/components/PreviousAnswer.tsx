@@ -2,7 +2,7 @@ import Grid from '@material-ui/core/Grid/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Operation } from '../services/operation';
-import { Question } from './Question';
+import { Expression } from './Expression';
 import Part from './Part';
 
 const useStyles = makeStyles(theme => ({
@@ -29,10 +29,10 @@ export const PreviousAnswer = (props: Props) => {
     const colorClass = operation.output() === answer ? classes.correct : classes.wrong;
     return (
         <Grid container className={classes.root}>
-            <Grid item xs={8}>
-                <Question operation={operation} />
+            <Grid item>
+                <Expression operation={operation} />
             </Grid>
-            <Grid item className={colorClass} xs={4}>
+            <Grid item className={colorClass}>
                 <Part value={answer} />
             </Grid>
         </Grid>

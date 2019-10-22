@@ -7,24 +7,19 @@ import Typography from '@material-ui/core/Typography/Typography';
 import React, { useState } from 'react';
 import './App.css';
 import Answer from './components/Answer';
-import { PreviousAnswer } from './components/PreviousAnswer';
-import { Question } from './components/Question';
+import { Expression } from './components/Expression';
 import { BinaryOperation, Operation, Operator } from './services/operation';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     flexGrow: 1,
   },
-  answer: {
-    fontFamily: 'Monospace',
+  previousAnswer: {
     textAlign: 'center'
   },
-  textfield: {
-    '& input[type=number]::-webkit-inner-spin-button': {
-      '-webkit-appearance': 'none',
-      margin: 0,
-    },
-  },
+  question: {
+    fontSize: '3rem',
+  }
 }));
 
 function randNumInRange(from: number, to: number): number {
@@ -42,17 +37,18 @@ function randomOperation(): Operation {
   return new BinaryOperation(x, y, operator);
 }
 
-class AnsweredOperation {
-  constructor(readonly operation: Operation, readonly answer: number) { }
-}
+interface AnsweredOperation extends Readonly<{
+  operation: Operation,
+  answer: number,
+}> { }
 
 export default function App() {
-  const classes = useStyles();
+  const cls = useStyles();
   const [operation, setOperation] = useState(randomOperation());
   const [answers, setAnswers] = useState([] as AnsweredOperation[]);
   const giveAnswer = (answer: number) => {
-    const answeredOp = new AnsweredOperation(operation, answer);
-    setAnswers([...answers, answeredOp]);
+    const answeredOp = { operation, answer };
+    setAnswers([answeredOp, ...answers]);
     if (operation.output() === answer) {
       setOperation(randomOperation());
     }
@@ -67,28 +63,26 @@ export default function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <main style={{margin: 5}}>
-        <Grid container className={classes.root} spacing={2}>
-          {answers.map((answer, i) => (
-            <Grid item key={i} className={classes.answer} xs={6}>
-              <PreviousAnswer operation={answer.operation} answer={answer.answer} />
-            </Grid>
-          ))}
+      <main style={{ margin: 5 }}>
+        <Grid container className={cls.root} spacing={2}>
 
-          <Grid item xs={12}>
-            <Grid container justify="center">
-              <Grid item key="question" lg={4} sm={6} xs={12}>
-                <Grid container alignItems="center" spacing={2}>
-                  <Grid item xs={7}>
-                    <Question operation={operation} />
-                  </Grid>
-                  <Grid item xs={5}>
-                    <Answer giveAnswer={giveAnswer} />
-                  </Grid>
-                </Grid>
-              </Grid>
+          <Grid container item xs={12} justify="center" alignItems="stretch" className={cls.question} spacing={2}>
+            <Grid item>
+              <Expression operation={operation} />
+            </Grid>
+            <Grid item xs={4}>
+              <Answer giveAnswer={giveAnswer} />
             </Grid>
           </Grid>
+
+          <Grid container item alignItems="center">
+            {answers.map((answer, i) => (
+              <Grid item key={i} className={cls.previousAnswer}>
+                <Expression operation={answer.operation} answer={answer.answer} />
+              </Grid>
+            ))}
+          </Grid>
+
         </Grid>
       </main>
     </>
