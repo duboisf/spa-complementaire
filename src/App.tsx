@@ -14,18 +14,20 @@ import { BinaryOperation, Operation, Operator } from './services/operation';
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
-    padding: theme.spacing(1),
-  },
-  question: {
-    padding: theme.spacing(1),
   },
   answer: {
     fontFamily: 'Monospace',
     textAlign: 'center'
-  }
+  },
+  textfield: {
+    '& input[type=number]::-webkit-inner-spin-button': {
+      '-webkit-appearance': 'none',
+      margin: 0,
+    },
+  },
 }));
 
-function randomNumberInRange(from: number, to: number): number {
+function randNumInRange(from: number, to: number): number {
   if (from > to) {
     [from, to] = [to, from];
   }
@@ -34,9 +36,9 @@ function randomNumberInRange(from: number, to: number): number {
 
 function randomOperation(): Operation {
   const operators = [Operator.Plus, Operator.Minus, Operator.Obelus, Operator.Times];
-  const operator = operators[randomNumberInRange(0, 1)];
-  const x = randomNumberInRange(1, 10);
-  const y = randomNumberInRange(1, 10);
+  const operator = operators[randNumInRange(0, 1)];
+  const x = randNumInRange(1, 10);
+  const y = randNumInRange(1, 10);
   return new BinaryOperation(x, y, operator);
 }
 
@@ -49,9 +51,11 @@ export default function App() {
   const [operation, setOperation] = useState(randomOperation());
   const [answers, setAnswers] = useState([] as AnsweredOperation[]);
   const giveAnswer = (answer: number) => {
-    answers.push(new AnsweredOperation(operation, answer));
-    setAnswers(answers);
-    setOperation(randomOperation());
+    const answeredOp = new AnsweredOperation(operation, answer);
+    setAnswers([...answers, answeredOp]);
+    if (operation.output() === answer) {
+      setOperation(randomOperation());
+    }
   }
   return (
     <>
@@ -63,7 +67,7 @@ export default function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <main>
+      <main style={{margin: 5}}>
         <Grid container className={classes.root} spacing={2}>
           {answers.map((answer, i) => (
             <Grid item key={i} className={classes.answer} xs={6}>
@@ -73,7 +77,7 @@ export default function App() {
 
           <Grid item xs={12}>
             <Grid container justify="center">
-              <Grid item key="question" className={classes.question} lg={4} sm={6} xs={12}>
+              <Grid item key="question" lg={4} sm={6} xs={12}>
                 <Grid container alignItems="center" spacing={2}>
                   <Grid item xs={7}>
                     <Question operation={operation} />
