@@ -5,33 +5,33 @@ import { Operation, operatorToString } from '../services/operation';
 import Part from './Part';
 
 const useStyles = makeStyles(theme => ({
-    root: {
-        fontFamily: 'Monospace',
-        textAlign: 'center',
-    },
+  root: {
+    fontFamily: 'Monospace',
+    textAlign: 'center',
+  },
 }));
 
 interface Props extends Readonly<{
-    operation: Operation
+  operation: Operation
 }> { }
 
 export const Question = (props: Props) => {
-    const classes = useStyles();
-    const { operation } = props;
-    return (
-        <Grid container className={classes.root}>
-            <Grid item xs={4}>
-                <Part value={operation.x} />
-            </Grid>
-            <Grid item xs={2}>
-                <Part value={operatorToString(operation.operator)} />
-            </Grid>
-            <Grid item xs={4}>
-                <Part value={operation.y} />
-            </Grid>
-            <Grid item xs={2}>
-                <Part value="=" />
-            </Grid>
-        </Grid>
-    );
+  const classes = useStyles();
+  const { operation } = props;
+  return (
+    <Grid container className={classes.root}>
+      <Grid item xs={4}>
+        <Part value={operation.x} />
+      </Grid>
+      <Grid item xs={2}>
+        <Part value={operatorToString(operation.operator)} />
+      </Grid>
+      <Grid item xs={4}>
+        <Part value={operation.y} />
+      </Grid>
+      <Grid item xs={2}>
+        <Part value="=" />
+      </Grid>
+    </Grid>
+  );
 }
