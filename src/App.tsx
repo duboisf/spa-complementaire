@@ -9,10 +9,13 @@ import './App.css';
 import Answer from './components/Answer';
 import { Expression } from './components/Expression';
 import { BinaryOperation, Operation, Operator } from './services/operation';
+import Container from '@material-ui/core/Container/Container';
+import { Paper } from '@material-ui/core';
 
-const useStyles = makeStyles(() => ({
-  root: {
-    flexGrow: 1,
+const useStyles = makeStyles(theme => ({
+  appBar: {
+    color: theme.palette.primary.contrastText,
+    backgroundColor: theme.palette.primary.main,
   },
   previousAnswer: {
     textAlign: 'center'
@@ -22,7 +25,7 @@ const useStyles = makeStyles(() => ({
   },
   stats: {
     fontSize: '1rem',
-  }
+  },
 }));
 
 function randNumInRange(from: number, to: number): number {
@@ -48,7 +51,22 @@ interface AnsweredOperation extends Readonly<{
 export default function App() {
   const cls = useStyles();
   const [operation, setOperation] = useState(randomOperation());
-  const [answers, setAnswers] = useState([] as AnsweredOperation[]);
+  const [answers, setAnswers] = useState([
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+    { operation: randomOperation(), answer: randNumInRange(0, 10) },
+  ] as AnsweredOperation[]);
   const [correctCount, setCorrectCount] = useState(0);
   const giveAnswer = (answer: number) => {
     const answeredOp = { operation, answer };
@@ -59,40 +77,47 @@ export default function App() {
     }
   }
   return (
-    <>
+    <div>
       <CssBaseline />
-      <AppBar position="relative">
+      <AppBar className={cls.appBar} position="relative">
         <Toolbar>
           <Typography variant="h6" color="inherit">
             Complémentaires
           </Typography>
         </Toolbar>
       </AppBar>
-      <main style={{ margin: 5 }}>
-        <Grid container className={cls.root} spacing={2}>
-
-          <Grid container item xs={12} justify="center" alignItems="stretch" className={cls.question} spacing={2}>
-            <Grid item>
-              <Expression operation={operation} />
-            </Grid>
-            <Grid item>
-              <Answer giveAnswer={giveAnswer} />
-            </Grid>
-            <Grid container item className={cls.stats} alignContent="center" xs={2}>
-              Total: {correctCount}/{answers.length}
+      <Container>
+        <Grid container>
+          <Grid container item>
+            <Grid item xs={12}>
+              <Paper>
+                <Grid container item xs={12} justify="center" alignItems="stretch" className={cls.question} spacing={0}>
+                  <Grid item>
+                    <Expression operation={operation} />
+                  </Grid>
+                  <Grid item>
+                    <Answer giveAnswer={giveAnswer} />
+                  </Grid>
+                  <Grid container item className={cls.stats} alignContent="center" xs={2}>
+                    Total: {correctCount}/{answers.length}
+                  </Grid>
+                </Grid>
+              </Paper>
             </Grid>
           </Grid>
 
-          <Grid container item alignItems="center">
+          <Grid container item alignItems="center" spacing={2}>
             {answers.map((answer, i) => (
               <Grid item key={i} className={cls.previousAnswer}>
-                <Expression operation={answer.operation} answer={answer.answer} />
+                <Paper>
+                  <Expression operation={answer.operation} answer={answer.answer} />
+                </Paper>
               </Grid>
             ))}
           </Grid>
 
         </Grid>
-      </main>
-    </>
+      </Container>
+    </div>
   );
 }

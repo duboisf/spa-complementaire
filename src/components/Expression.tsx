@@ -2,6 +2,7 @@ import Box from '@material-ui/core/Box/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Operation as Op, operatorToString } from '../services/operation';
+import Paper from '@material-ui/core/Paper/Paper';
 
 const useSpanStyle = makeStyles(() => ({
   root: {
@@ -62,9 +63,9 @@ export const Expression = (props: ExpressionProps) => {
   const operator = operatorToString(op.operator);
   return (
     <Box className={cls.root}>
-      <Span3ch value={op.x} />
+      <Span3ch value={op.x} centered />
       <Span3ch value={operator} centered />
-      <Span3ch value={op.y} />
+      <Span3ch value={op.y} centered />
       <Span3ch value="=" centered />
       {props.answer !== undefined &&
         <Box className={`${cls.answer} ${answerBackground}`}>
