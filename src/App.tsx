@@ -1,4 +1,6 @@
+import { Paper } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar/AppBar';
+import Container from '@material-ui/core/Container/Container';
 import CssBaseline from '@material-ui/core/CssBaseline/CssBaseline';
 import Grid from '@material-ui/core/Grid/Grid';
 import { makeStyles } from '@material-ui/core/styles';
@@ -9,10 +11,12 @@ import './App.css';
 import Answer from './components/Answer';
 import { Expression } from './components/Expression';
 import { BinaryOperation, Operation, Operator } from './services/operation';
-import Container from '@material-ui/core/Container/Container';
-import { Paper } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    fontFamily: 'monospace',
+    flexGrow: 1,
+  },
   appBar: {
     color: theme.palette.primary.contrastText,
     backgroundColor: theme.palette.primary.main,
@@ -21,10 +25,15 @@ const useStyles = makeStyles(theme => ({
     textAlign: 'center'
   },
   question: {
+    fontFamily: 'monospace',
     fontSize: '3rem',
+    margin: theme.spacing(2),
+    padding: theme.spacing(2),
   },
   stats: {
-    fontSize: '1rem',
+    fontSize: '0.7rem',
+    height: '100%',
+    paddingLeft: theme.spacing(2),
   },
 }));
 
@@ -77,7 +86,7 @@ export default function App() {
     }
   }
   return (
-    <div>
+    <div className={cls.root}>
       <CssBaseline />
       <AppBar className={cls.appBar} position="relative">
         <Toolbar>
@@ -88,28 +97,38 @@ export default function App() {
       </AppBar>
       <Container>
         <Grid container>
-          <Grid container item>
-            <Grid item xs={12}>
-              <Paper>
-                <Grid container item xs={12} justify="center" alignItems="stretch" className={cls.question} spacing={0}>
+          <Grid container item justify="center">
+            <Grid item>
+              <Paper className={cls.question}>
+                <Grid container>
                   <Grid item>
-                    <Expression operation={operation} />
+                    <Grid container justify="flex-end" wrap="nowrap">
+                      <Grid item>
+                          <Expression operation={operation} />
+                      </Grid>
+                      <Grid item>
+                        <Answer giveAnswer={giveAnswer} />
+                      </Grid>
+                    </Grid>
                   </Grid>
                   <Grid item>
-                    <Answer giveAnswer={giveAnswer} />
-                  </Grid>
-                  <Grid container item className={cls.stats} alignContent="center" xs={2}>
-                    Total: {correctCount}/{answers.length}
+                    <Grid container className={cls.stats} alignContent="center">
+                      <Grid item>
+                        <Typography variant="body1">
+                          Total: {correctCount}/{answers.length}
+                        </Typography>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Paper>
             </Grid>
           </Grid>
 
-          <Grid container item alignItems="center" spacing={2}>
+          <Grid container item justify="center" spacing={2}>
             {answers.map((answer, i) => (
               <Grid item key={i} className={cls.previousAnswer}>
-                <Paper>
+                <Paper style={{padding: 8}}>
                   <Expression operation={answer.operation} answer={answer.answer} />
                 </Paper>
               </Grid>

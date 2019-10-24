@@ -1,19 +1,18 @@
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField/TextField';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
+import OutlinedInput from '@material-ui/core/OutlinedInput/OutlinedInput';
 
 const useStyles = makeStyles(() => ({
   form: {
-    boxSizing: 'border-box',
-    fontFamily: 'Monospace',
+    fontFamily: 'monospace',
     fontSize: '3rem',
+    boxSizing: 'border-box',
     width: '4ch',
   },
   textfield: {
-    '& input': {
-      fontFamily: 'Monospace',
-      fontSize: '3rem',
-    },
+    fontFamily: 'monospace',
+    fontSize: '3rem',
     '& input[type=number]::-webkit-inner-spin-button': {
       WebkitAppearance: 'none',
       margin: 0,
@@ -41,10 +40,11 @@ const Answer = ({ giveAnswer }: Props) => {
   }
   return (
     <form className={classes.form} onSubmit={onSubmit}>
-      <TextField
+      <OutlinedInput
         className={classes.textfield}
         type="number" onChange={onInput}
-        variant="standard"
+        placeholder="???"
+        labelWidth={0}
         value={answer} />
     </form>
   )

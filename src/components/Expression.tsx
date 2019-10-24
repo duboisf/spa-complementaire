@@ -2,44 +2,30 @@ import Box from '@material-ui/core/Box/Box';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
 import { Operation as Op, operatorToString } from '../services/operation';
-import Paper from '@material-ui/core/Paper/Paper';
-
-const useSpanStyle = makeStyles(() => ({
-  root: {
-    width: '3ch',
-  },
-  alignRight: {
-    textAlign: 'right',
-  },
-  center: {
-    textAlign: 'center',
-  }
-}));
-
-const Span3ch = (props: Readonly<{ centered?: boolean, value: string | number }>) => {
-  const cls = useSpanStyle();
-  const alignment = props.centered ? cls.center : cls.alignRight;
-  return <span className={`${cls.root} ${alignment}`}>{props.value}</span>;
-}
+import Grid from '@material-ui/core/Grid/Grid';
+import { Container } from '@material-ui/core';
 
 interface ExpressionProps extends Readonly<{ operation: Op, answer?: number }> { }
 
-const useExpressionStyle = makeStyles({
+const useExpressionStyle = makeStyles(theme => ({
   root: {
     fontFamily: 'Monospace',
-    '& span': {
-      display: 'inline-block',
-    },
+  },
+  box3ch: {
+    width: '3ch',
+    textAlign: 'center',
+    verticalAlign: 'middle'
   },
   operator: {
     textAlign: 'center',
   },
-  equals: {
-    width: '1ch',
-    textAlign: 'left',
-  },
   answer: {
-    display: 'inline-block',
+    borderRadius: theme.spacing(1) / 2,
+    paddingLeft: theme.spacing(1),
+    paddingRight: theme.spacing(1),
+    marginRight: theme.spacing(1),
+    textAlign: 'right',
+    width: '6ch',
   },
   correct: {
     backgroundColor: 'rgba(0, 255, 0, 0.5)',
@@ -47,13 +33,7 @@ const useExpressionStyle = makeStyles({
   incorrect: {
     backgroundColor: 'rgba(255, 0, 0, 0.5)',
   },
-  checkIcon: {
-    color: 'green',
-  },
-  crossIcon: {
-    color: 'red',
-  }
-});
+}));
 
 export const Expression = (props: ExpressionProps) => {
   const isCorrect = props.operation.output() === props.answer;
@@ -62,16 +42,24 @@ export const Expression = (props: ExpressionProps) => {
   const op = props.operation;
   const operator = operatorToString(op.operator);
   return (
-    <Box className={cls.root}>
-      <Span3ch value={op.x} centered />
-      <Span3ch value={operator} centered />
-      <Span3ch value={op.y} centered />
-      <Span3ch value="=" centered />
-      {props.answer !== undefined &&
-        <Box className={`${cls.answer} ${answerBackground}`}>
-          <Span3ch value={props.answer} centered />
-        </Box>
-      }
-    </Box>
+    <Grid container style={{height: '100%'}} justify="center" alignItems="center">
+      <Grid item className={cls.box3ch}>
+        {op.x}
+      </Grid>
+      <Grid item className={cls.box3ch}>
+        {operator}
+      </Grid>
+      <Grid item className={cls.box3ch}>
+        {op.y}
+      </Grid>
+      <Grid item className={cls.box3ch}>
+        =
+      </Grid>
+       {props.answer !== undefined &&
+         <Grid xs item className={`${cls.answer} ${answerBackground} ${cls.box3ch}`}>
+           {props.answer}
+         </Grid>
+       }
+    </Grid>
   );
 }
