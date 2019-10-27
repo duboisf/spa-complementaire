@@ -14,17 +14,13 @@ const useExpressionStyle = makeStyles(theme => ({
   box3ch: {
     width: '3ch',
     textAlign: 'center',
-    verticalAlign: 'middle'
   },
   operator: {
     textAlign: 'center',
   },
   answer: {
-    borderRadius: theme.spacing(1) / 2,
-    paddingLeft: theme.spacing(1),
-    paddingRight: theme.spacing(1),
-    marginRight: theme.spacing(1),
-    textAlign: 'right',
+    borderRadius: 4,
+    textAlign: 'center',
     width: '6ch',
   },
   correct: {
@@ -42,7 +38,7 @@ export const Expression = (props: ExpressionProps) => {
   const op = props.operation;
   const operator = operatorToString(op.operator);
   return (
-    <Grid container style={{height: '100%'}} justify="center" alignItems="center">
+    <Grid container style={{height: '100%'}} justify="center" alignItems="center" alignContent="center" wrap="nowrap">
       <Grid item className={cls.box3ch}>
         {op.x}
       </Grid>

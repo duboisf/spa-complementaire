@@ -3,16 +3,31 @@ import TextField from '@material-ui/core/TextField/TextField';
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import OutlinedInput from '@material-ui/core/OutlinedInput/OutlinedInput';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   form: {
     fontFamily: 'monospace',
-    fontSize: '3rem',
     boxSizing: 'border-box',
-    width: '4ch',
+    [theme.breakpoints.up('xs')]: {
+      maxWidth: '4rem',
+    },
+    [theme.breakpoints.up('sm')]: {
+      maxWidth: '7rem',
+    },
+    [theme.breakpoints.up('lg')]: {
+      maxWidth: '12rem',
+    },
   },
   textfield: {
-    fontFamily: 'monospace',
-    fontSize: '3rem',
+    fontFamily: `'Roboto Mono', monospace`,
+    [theme.breakpoints.up('xs')]: {
+      fontSize: '1rem',
+    },
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '2rem',
+    },
+    [theme.breakpoints.up('lg')]: {
+      fontSize: '3rem',
+    },
     '& input[type=number]::-webkit-inner-spin-button': {
       WebkitAppearance: 'none',
       margin: 0,

@@ -24,9 +24,20 @@ const useStyles = makeStyles(theme => ({
   previousAnswer: {
     textAlign: 'center'
   },
+  hidden: {
+    visibility: 'hidden',
+  },
   question: {
-    fontFamily: 'monospace',
-    fontSize: '3rem',
+    fontFamily: `'Roboto Mono', monospace`,
+    [theme.breakpoints.up('xs')]: {
+      fontSize: '1rem',
+    },
+    [theme.breakpoints.up('sm')]: {
+      fontSize: '2rem',
+    },
+    [theme.breakpoints.up('lg')]: {
+      fontSize: '3rem',
+    },
     margin: theme.spacing(2),
     padding: theme.spacing(2),
   },
@@ -57,25 +68,17 @@ interface AnsweredOperation extends Readonly<{
   answer: number,
 }> { }
 
+const fillerOperation: AnsweredOperation = {
+  operation: new BinaryOperation(1, 1, Operator.Plus),
+  answer: 1
+}
+
 export default function App() {
   const cls = useStyles();
   const [operation, setOperation] = useState(randomOperation());
-  const [answers, setAnswers] = useState([
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-    { operation: randomOperation(), answer: randNumInRange(0, 10) },
-  ] as AnsweredOperation[]);
+  const [answers, setAnswers] = useState(
+    Array(30).fill(1).map(() => ({ operation: randomOperation(), answer: randNumInRange(0, 10) }))
+  );
   const [correctCount, setCorrectCount] = useState(0);
   const giveAnswer = (answer: number) => {
     const answeredOp = { operation, answer };
@@ -95,16 +98,16 @@ export default function App() {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container>
+      <Container maxWidth="xl">
         <Grid container>
           <Grid container item justify="center">
             <Grid item>
               <Paper className={cls.question}>
-                <Grid container>
+                <Grid container wrap="nowrap">
                   <Grid item>
                     <Grid container justify="flex-end" wrap="nowrap">
                       <Grid item>
-                          <Expression operation={operation} />
+                        <Expression operation={operation} />
                       </Grid>
                       <Grid item>
                         <Answer giveAnswer={giveAnswer} />
@@ -114,9 +117,7 @@ export default function App() {
                   <Grid item>
                     <Grid container className={cls.stats} alignContent="center">
                       <Grid item>
-                        <Typography variant="body1">
-                          Total: {correctCount}/{answers.length}
-                        </Typography>
+                        Total: {correctCount}/{answers.length}
                       </Grid>
                     </Grid>
                   </Grid>
@@ -128,8 +129,15 @@ export default function App() {
           <Grid container item justify="center" spacing={2}>
             {answers.map((answer, i) => (
               <Grid item key={i} className={cls.previousAnswer}>
-                <Paper style={{padding: 8}}>
+                <Paper style={{ padding: 8 }}>
                   <Expression operation={answer.operation} answer={answer.answer} />
+                </Paper>
+              </Grid>
+            ))}
+            {Array(12).fill(1).map(() => (
+              <Grid item className={cls.hidden}>
+                <Paper style={{ padding: 8 }}>
+                  <Expression operation={fillerOperation.operation} answer={fillerOperation.answer} />
                 </Paper>
               </Grid>
             ))}
