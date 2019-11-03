@@ -1,15 +1,14 @@
-import Box from '@material-ui/core/Box/Box';
+import Grid from '@material-ui/core/Grid/Grid';
 import { makeStyles } from '@material-ui/core/styles';
 import React from 'react';
-import { Operation as Op, operatorToString } from '../services/operation';
-import Grid from '@material-ui/core/Grid/Grid';
-import { Container } from '@material-ui/core';
+import { Operation as Op, opToString } from '../lib/operation';
 
 interface ExpressionProps extends Readonly<{ operation: Op, answer?: number }> { }
 
 const useExpressionStyle = makeStyles(theme => ({
   root: {
     fontFamily: 'Monospace',
+    lineHeight: 'normal',
   },
   box3ch: {
     width: '3ch',
@@ -36,7 +35,7 @@ export const Expression = (props: ExpressionProps) => {
   const cls = useExpressionStyle();
   const answerBackground = isCorrect ? cls.correct : cls.incorrect;
   const op = props.operation;
-  const operator = operatorToString(op.operator);
+  const operator = opToString(op.operator);
   return (
     <Grid container style={{height: '100%'}} justify="center" alignItems="center" alignContent="center" wrap="nowrap">
       <Grid item className={cls.box3ch}>

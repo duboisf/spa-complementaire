@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 import './App.css';
 import Answer from './components/Answer';
 import { Expression } from './components/Expression';
-import { BinaryOperation, Operation, Operator } from './services/operation';
+import { BinaryOperation, Operation, Operator, randOp, randNumInRange } from './lib/operation';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -43,25 +43,11 @@ const useStyles = makeStyles(theme => ({
   },
   stats: {
     fontSize: '0.7rem',
-    height: '100%',
+    height: '3em',
+    lineHeight: 'normal',
     paddingLeft: theme.spacing(2),
   },
 }));
-
-function randNumInRange(from: number, to: number): number {
-  if (from > to) {
-    [from, to] = [to, from];
-  }
-  return from + Math.round(Math.random() * (to - from))
-}
-
-function randomOperation(): Operation {
-  const operators = [Operator.Plus, Operator.Minus, Operator.Obelus, Operator.Times];
-  const operator = operators[randNumInRange(0, 1)];
-  const x = randNumInRange(1, 10);
-  const y = randNumInRange(1, 10);
-  return new BinaryOperation(x, y, operator);
-}
 
 interface AnsweredOperation extends Readonly<{
   operation: Operation,
@@ -73,18 +59,21 @@ const fillerOperation: AnsweredOperation = {
   answer: 1
 }
 
+const PlusMinus = [Operator.Plus, Operator.Minus];
+
 export default function App() {
   const cls = useStyles();
-  const [operation, setOperation] = useState(randomOperation());
+  const [operation, setOperation] = useState(randOp(PlusMinus, 5, 10));
+  const [maxAnswers, setMaxAnswers] = useState(0);
   const [answers, setAnswers] = useState(
-    Array(30).fill(1).map(() => ({ operation: randomOperation(), answer: randNumInRange(0, 10) }))
+    Array(0).fill(1).map(() => ({ operation: randOp(PlusMinus, 5, 10), answer: randNumInRange(10) }))
   );
   const [correctCount, setCorrectCount] = useState(0);
   const giveAnswer = (answer: number) => {
     const answeredOp = { operation, answer };
     setAnswers([...answers, answeredOp]);
     if (operation.output() === answer) {
-      setOperation(randomOperation());
+      setOperation(randOp(PlusMinus, 5, 10));
       setCorrectCount(correctCount + 1);
     }
   }
@@ -114,11 +103,9 @@ export default function App() {
                       </Grid>
                     </Grid>
                   </Grid>
-                  <Grid item>
-                    <Grid container className={cls.stats} alignContent="center">
-                      <Grid item>
+                  <Grid item className={cls.stats}>
+                    <Grid container item className={cls.stats} alignContent="stretch">
                         Total: {correctCount}/{answers.length}
-                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
